@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "eugenes_horse_whistle",
+  "version": "1.0.1",
+  "name": "Eugene's Horse Whistle",
+  "authors": [
+    "kltyton,eugene"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "Academic Free License v3.0",
+  "icon": "assets/eugenes_horse_whistle/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kltyton.eugeneshorsewhistle.EugenesHorseWhistleMod"
+    ],
+    "client": [
+      "com.kltyton.eugeneshorsewhistle.ClientInit"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric": "*",
+    "minecraft": "~1.20",
+    "java": ">=17"
+  }
+}

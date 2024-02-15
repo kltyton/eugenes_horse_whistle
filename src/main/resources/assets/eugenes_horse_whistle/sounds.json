@@ -1,0 +1,12 @@
+{
+  "whistle": {
+    "category": "player",
+    "subtitle": "subtitles.whistle",
+    "sounds": [
+      {
+        "name": "eugenes_horse_whistle:whistle",
+        "stream": false
+      }
+    ]
+  }
+}
