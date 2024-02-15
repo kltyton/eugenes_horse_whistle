@@ -38,8 +38,8 @@ import java.util.UUID;
 
 public class CallProcedure {
 	private static final double ENTITY_SEARCH_RADIUS = 128.0;
-	private static final int MAX_TELEPORT_OFFSET = 16;
-	private static final double TELEPORT_DISTANCE_THRESHOLD = 32.0;
+	private static final int MAX_TELEPORT_OFFSET = 32;
+	private static final double TELEPORT_DISTANCE_THRESHOLD = 64.0;
 	public static void execute(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
