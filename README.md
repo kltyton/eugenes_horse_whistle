@@ -28,4 +28,5 @@ And Mcreator is no longer used.
 ![Logo](https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png)
 - [@kltyton](https://space.bilibili.com/353872260/)
 - [@eugene](https://space.bilibili.com/190900020/)
-- ![App Screenshot]([https://via.placeholder.com/468x300?text=App+Screenshot+Here](https://cdn.modrinth.com/data/kdPyFGUG/da988d833a79a341fd48baed434787f51d9a1860.png)https://cdn.modrinth.com/data/kdPyFGUG/da988d833a79a341fd48baed434787f51d9a1860.png)
+![App Screenshot](https://cdn.modrinth.com/data/kdPyFGUG/da988d833a79a341fd48baed434787f51d9a1860.png)
+
