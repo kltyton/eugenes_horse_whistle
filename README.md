@@ -1,6 +1,5 @@
 # Eugene's Whistle & Spur
 This is originally for modpack [AnimateCraft: Lankeren](https://modrinth.com/modpack/animatecraft-lankeren). If you like this content, play it in the modpack to gain the best experience!
-![App Screenshot](https://cdn.modrinth.com/data/kdPyFGUG/da988d833a79a341fd48baed434787f51d9a1860.png)
 
 
 ## Whistle
@@ -13,6 +12,7 @@ and follow you for a while.
 When you are riding, press H to spur your horse on. 
 It will get a little injured, but it will speed up for a while! Even more, 
 there are two levels of spur-speed, meaning that you can spur it twice to make it run even faster.
+![App Screenshot](https://cdn.modrinth.com/data/kdPyFGUG/da988d833a79a341fd48baed434787f51d9a1860.png)
 ## 版权声明|License
 - #### 作者保留该作品的所有权利。禁止在其他社交平台（包括群聊、网盘等）重新上传，否则后果自负。 
 This content is All Rights Reserved, meaning that you cannot redistribute/modify and distribute any content created by others or by me.
@@ -25,7 +25,9 @@ The tool used is mcreator.
 - #### 后续更新重置由kltyton负责，且不再使用MCR
 Subsequent updates are handled by [kltyton](https://modrinth.com/user/kltyton).
 And Mcreator is no longer used.
-## 🔗 BiliBili链接
+
+
 ![Logo](https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png)
+## 🔗 BiliBili链接
 - [@kltyton](https://space.bilibili.com/353872260/)
 - [@eugene](https://space.bilibili.com/190900020/)
