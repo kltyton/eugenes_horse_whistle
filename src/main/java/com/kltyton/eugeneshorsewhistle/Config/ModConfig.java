@@ -1,23 +1,23 @@
-package com.kltyton.eugeneshorsewhistle.Config;
+package com.kltyton.eugeneshorsewhistle.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-@Config(name = "eugeneshorsewhistle")
+@Config(name = "eugenes_horse_whistle")
 public class ModConfig implements ConfigData {
-    @ConfigEntry.Gui.CollapsibleObject
-    public SearchRadius searchRadius = new SearchRadius();
+    public double entitySearchRadius = 128.0;
+    public int maxTeleportOffset = 32;
+    public double teleportDistanceThreshold = 64.0;
 
-    @ConfigEntry.Gui.CollapsibleObject
-    public TeleportSettings teleportSettings = new TeleportSettings();
-
-    public static class SearchRadius {
-        public double entitySearchRadius = 128.0;
+    public double getEntitySearchRadius() {
+        return entitySearchRadius;
     }
 
-    public static class TeleportSettings {
-        public int maxTeleportOffset = 32;
-        public double teleportDistanceThreshold = 64.0;
+    public int getMaxTeleportOffset() {
+        return maxTeleportOffset;
+    }
+
+    public double getTeleportDistanceThreshold() {
+        return teleportDistanceThreshold;
     }
 }

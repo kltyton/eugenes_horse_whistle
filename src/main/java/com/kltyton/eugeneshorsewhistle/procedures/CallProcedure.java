@@ -1,6 +1,8 @@
 package com.kltyton.eugeneshorsewhistle.procedures;
 
+import com.kltyton.eugeneshorsewhistle.config.ModConfig;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModSounds;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -37,9 +39,9 @@ import java.util.Random;
 import java.util.UUID;
 
 public class CallProcedure {
-	private static final double ENTITY_SEARCH_RADIUS = 128.0;
-	private static final int MAX_TELEPORT_OFFSET = 32;
-	private static final double TELEPORT_DISTANCE_THRESHOLD = 64.0;
+	private static final double ENTITY_SEARCH_RADIUS = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getEntitySearchRadius();
+	private static final int MAX_TELEPORT_OFFSET = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getMaxTeleportOffset();
+	private static final double TELEPORT_DISTANCE_THRESHOLD = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getTeleportDistanceThreshold();
 	public static void execute(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
