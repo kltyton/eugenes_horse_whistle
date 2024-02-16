@@ -10,7 +10,7 @@
     "homepage": "",
     "sources": ""
   },
-  "license": "Academic Free License v3.0",
+  "license": "MIT",
   "icon": "assets/eugenes_horse_whistle/icon.png",
   "environment": "*",
   "entrypoints": {
