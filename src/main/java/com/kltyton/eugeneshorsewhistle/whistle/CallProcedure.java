@@ -33,15 +33,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class CallProcedure {
 	private static final double ENTITY_SEARCH_RADIUS = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getEntitySearchRadius();
 	private static final int MAX_TELEPORT_OFFSET = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getMaxTeleportOffset();
 	private static final double TELEPORT_DISTANCE_THRESHOLD = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getTeleportDistanceThreshold();
+
 	public static void execute(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -60,60 +58,82 @@ public class CallProcedure {
 			final Vec3 playerCenter = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
 
 // 遍历当前玩家驯服的所有马类生物
-			for (Entity tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && ((AbstractHorse) e).isTamed() && ((AbstractHorse) e).getOwnerUUID().equals(entity.getUUID()))) {
-				AbstractHorse tamedHorse = (AbstractHorse) tamedEntity;
+			for (AbstractHorse tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && e.isTamed() && Objects.equals(e.getOwnerUUID(), entity.getUUID()))) {
+                if (!tamedEntity.isVehicle()) {
+					// 检查马是否装备了鞍
+					if (tamedEntity.isSaddled()) {
+						// 传送装备了鞍的马到当前玩家位置
+						tamedEntity.teleportTo(playerCenter.x(), playerCenter.y(), playerCenter.z());
+					}
+					final Vec3 _center = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
+					List<Entity> _entfound;
+					_entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(ENTITY_SEARCH_RADIUS), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound)
+						if (entityiterator instanceof AbstractHorse) {
+							AbstractHorse horse;
+							horse = (AbstractHorse) entityiterator;
+							if (horse.isTamed()) {
+								UUID ownerUUID = horse.getOwnerUUID();
 
-				// 检查马是否装备了鞍
-				if (tamedHorse.isSaddled()) {
-					// 传送装备了鞍的马到当前玩家位置
-					tamedHorse.teleportTo(playerCenter.x(), playerCenter.y(), playerCenter.z());
-				}
-				final Vec3 _center = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
-				List<Entity> _entfound;
-				_entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(ENTITY_SEARCH_RADIUS), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound)
-					if (entityiterator instanceof AbstractHorse) {
-						AbstractHorse horse;
-						horse = (AbstractHorse) entityiterator;
-						if (horse.isTamed()) {
-							UUID ownerUUID = horse.getOwnerUUID();
-
-							MinecraftServer server = world.getServer();
-							ServerPlayer player;
-							player = server.getPlayerList().getPlayer(entity.getUUID());
-							if (player != null) {
-								UUID playerUUID = player.getUUID();
-								if (ownerUUID.equals(playerUUID)) {
-									if (!horse.isVehicle()) {
-										if ( entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-											_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, false, false));
-										if (!entityiterator.isVehicle()) {
-											Mob _mobEnt = (Mob) entityiterator;
-											if (!_mobEnt.isLeashed()) {
-												BlockPos ownerPos = player.blockPosition();
-												Vec3 ownerVec = Vec3.atCenterOf(ownerPos);
-												double distance = horse.position().distanceTo(ownerVec);
-												if (distance > TELEPORT_DISTANCE_THRESHOLD) {
-													Random random = new Random();
-													int maxOffset = MAX_TELEPORT_OFFSET;
-													int offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-													int offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-													float previousHealth = horse.getHealth();
-													BlockPos targetPos = new BlockPos(ownerPos.getX() + offsetX, ownerPos.getY(), ownerPos.getZ() + offsetZ);
-													while (!world.getBlockState(targetPos).isAir()) {
-														offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-														offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
-														targetPos = new BlockPos(ownerPos.getX() + offsetX, ownerPos.getY(), ownerPos.getZ() + offsetZ);
-													}
-													horse.teleportTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
-													float healthChange = previousHealth - horse.getHealth();
-													if (healthChange > 0) {
-														horse.teleportTo(ownerPos.getX(), ownerPos.getY(), ownerPos.getZ());
+								MinecraftServer server = world.getServer();
+								ServerPlayer player;
+								player = Objects.requireNonNull(server).getPlayerList().getPlayer(entity.getUUID());
+								if (player != null) {
+									UUID playerUUID = player.getUUID();
+									if (Objects.requireNonNull(ownerUUID).equals(playerUUID)) {
+										if (!horse.isVehicle()) {
+											if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+												_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, false, false));
+											if (!entityiterator.isVehicle()) {
+												Mob _mobEnt = (Mob) entityiterator;
+												if (!_mobEnt.isLeashed()) {
+													BlockPos ownerPos = player.blockPosition();
+													Vec3 ownerVec = Vec3.atCenterOf(ownerPos);
+													double distance = horse.position().distanceTo(ownerVec);
+													if (distance > TELEPORT_DISTANCE_THRESHOLD) {
+														Random random = new Random();
+														int maxOffset = MAX_TELEPORT_OFFSET;
+														int offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+														int offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+														float previousHealth = horse.getHealth();
+														BlockPos targetPos = new BlockPos(ownerPos.getX() + offsetX, ownerPos.getY(), ownerPos.getZ() + offsetZ);
+														while (!world.getBlockState(targetPos).isAir()) {
+															offsetX = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+															offsetZ = random.nextInt(maxOffset * 2 + 1) - maxOffset;
+															targetPos = new BlockPos(ownerPos.getX() + offsetX, ownerPos.getY(), ownerPos.getZ() + offsetZ);
+														}
+														horse.teleportTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
+														float healthChange = previousHealth - horse.getHealth();
+														if (healthChange > 0) {
+															horse.teleportTo(ownerPos.getX(), ownerPos.getY(), ownerPos.getZ());
+															horse.getNavigation().stop();
+														}
 														horse.getNavigation().stop();
 													}
-													horse.getNavigation().stop();
+													if (entityiterator instanceof Horse) {
+														new Object() {
+															private int ticks = 0;
+
+															public void startDelay(LevelAccessor world) {
+																ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																	this.ticks++;
+																	if (this.ticks == 30) {
+																		if (world instanceof Level _level) {
+																			if (!_level.isClientSide()) {
+																				_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()),
+																						BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.horse.angry")), SoundSource.AMBIENT, 5, 1);
+																			} else {
+																				_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.horse.angry")),
+																						SoundSource.AMBIENT, 5, 1, false);
+																			}
+																		}
+																	}
+																});
+															}
+														}.startDelay(world);
+													}
 												}
-												if (entityiterator instanceof Horse) {
+												if (entityiterator instanceof Donkey) {
 													new Object() {
 														private int ticks = 0;
 
@@ -124,9 +144,9 @@ public class CallProcedure {
 																	if (world instanceof Level _level) {
 																		if (!_level.isClientSide()) {
 																			_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()),
-																					BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.horse.angry")), SoundSource.AMBIENT, 5, 1);
+																					BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.donkey.angry")), SoundSource.AMBIENT, 5, 1);
 																		} else {
-																			_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.horse.angry")),
+																			_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.donkey.angry")),
 																					SoundSource.AMBIENT, 5, 1, false);
 																		}
 																	}
@@ -135,174 +155,152 @@ public class CallProcedure {
 														}
 													}.startDelay(world);
 												}
-											}
-											if (entityiterator instanceof Donkey) {
-												new Object() {
-													private int ticks = 0;
+												if (entityiterator instanceof Mule) {
+													new Object() {
+														private int ticks = 0;
 
-													public void startDelay(LevelAccessor world) {
-														ServerTickEvents.END_SERVER_TICK.register((server) -> {
-															this.ticks++;
-															if (this.ticks == 30) {
-																if (world instanceof Level _level) {
-																	if (!_level.isClientSide()) {
-																		_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()),
-																				BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.donkey.angry")), SoundSource.AMBIENT, 5, 1);
-																	} else {
-																		_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.donkey.angry")),
-																				SoundSource.AMBIENT, 5, 1, false);
-																	}
-																}
-															}
-														});
-													}
-												}.startDelay(world);
-											}
-											if (entityiterator instanceof Mule) {
-												new Object() {
-													private int ticks = 0;
-
-													public void startDelay(LevelAccessor world) {
-														ServerTickEvents.END_SERVER_TICK.register((server) -> {
-															this.ticks++;
-															if (this.ticks == 30) {
-																if (world instanceof Level _level) {
-																	if (!_level.isClientSide()) {
-																		_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.mule.angry")),
-																				SoundSource.AMBIENT, 5, 1);
-																	} else {
-																		_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.mule.angry")),
-																				SoundSource.AMBIENT, 5, 1, false);
-																	}
-																}
-															}
-														});
-													}
-												}.startDelay(world);
-											}
-											Mob _entity = (Mob) entityiterator;
-											_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-											new Object() {
-												private int ticks = 0;
-
-												public void startDelay(LevelAccessor world) {
-													ServerTickEvents.END_SERVER_TICK.register((server) -> {
-														this.ticks++;
-														if (this.ticks == 40) {
-															Mob _entity = (Mob) entityiterator;
-															_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-															new Object() {
-																private int ticks = 0;
-
-																public void startDelay(LevelAccessor world) {
-																	ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																		this.ticks++;
-																		if (this.ticks == 40) {
-																			Mob _entity = (Mob) entityiterator;
-																			_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																			new Object() {
-																				private int ticks = 0;
-
-																				public void startDelay(LevelAccessor world) {
-																					ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																						this.ticks++;
-																						if (this.ticks == 40) {
-																							Mob _entity = (Mob) entityiterator;
-																							_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																							new Object() {
-																								private int ticks = 0;
-
-																								public void startDelay(LevelAccessor world) {
-																									ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																										this.ticks++;
-																										if (this.ticks == 40) {
-																											Mob _entity = (Mob) entityiterator;
-																											_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																											new Object() {
-																												private int ticks = 0;
-
-																												public void startDelay(LevelAccessor world) {
-																													ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																														this.ticks++;
-																														if (this.ticks == 40) {
-																															Mob _entity = (Mob) entityiterator;
-																															_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																															new Object() {
-																																private int ticks = 0;
-
-																																public void startDelay(LevelAccessor world) {
-																																	ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																																		this.ticks++;
-																																		if (this.ticks == 40) {
-																																			Mob _entity = (Mob) entityiterator;
-																																			_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																																			new Object() {
-																																				private int ticks = 0;
-
-																																				public void startDelay(LevelAccessor ignoredWorld) {
-																																					ServerTickEvents.END_SERVER_TICK.register((server) -> {
-																																						this.ticks++;
-																																						if (this.ticks == 40) {
-																																							Mob _entity = (Mob) entityiterator;
-																																							_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
-																																						}
-																																					});
-																																				}
-																																			}.startDelay(world);
-																																		}
-																																	});
-																																}
-																															}.startDelay(world);
-																														}
-																													});
-																												}
-																											}.startDelay(world);
-																										}
-																									});
-																								}
-																							}.startDelay(world);
-																						}
-																					});
-																				}
-																			}.startDelay(world);
+														public void startDelay(LevelAccessor world) {
+															ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																this.ticks++;
+																if (this.ticks == 30) {
+																	if (world instanceof Level _level) {
+																		if (!_level.isClientSide()) {
+																			_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.mule.angry")),
+																					SoundSource.AMBIENT, 5, 1);
+																		} else {
+																			_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("entity.mule.angry")),
+																					SoundSource.AMBIENT, 5, 1, false);
 																		}
-																	});
+																	}
 																}
-															}.startDelay(world);
+															});
 														}
-													});
+													}.startDelay(world);
 												}
-											}.startDelay(world);
-										}
-									} else if (entity.isPassenger()) {
-										if (entity instanceof Player _player && !_player.level().isClientSide())
-											_player.displayClientMessage(Component.literal((Component.translatable("translation.spur.on").getString())), true);
-										if (!((entity.getRootVehicle()) instanceof LivingEntity _livEnt72 && _livEnt72.hasEffect(MobEffects.MOVEMENT_SPEED))) {
-											if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
-												_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
-													@Override
-													public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
-														return Component.translatable("death.attack." + "spur");
+												Mob _entity = (Mob) entityiterator;
+												_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+												new Object() {
+													private int ticks = 0;
+
+													public void startDelay(LevelAccessor world) {
+														ServerTickEvents.END_SERVER_TICK.register((server) -> {
+															this.ticks++;
+															if (this.ticks == 40) {
+																Mob _entity = (Mob) entityiterator;
+																_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																new Object() {
+																	private int ticks = 0;
+
+																	public void startDelay(LevelAccessor world) {
+																		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																			this.ticks++;
+																			if (this.ticks == 40) {
+																				Mob _entity = (Mob) entityiterator;
+																				_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																				new Object() {
+																					private int ticks = 0;
+
+																					public void startDelay(LevelAccessor world) {
+																						ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																							this.ticks++;
+																							if (this.ticks == 40) {
+																								Mob _entity = (Mob) entityiterator;
+																								_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																								new Object() {
+																									private int ticks = 0;
+
+																									public void startDelay(LevelAccessor world) {
+																										ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																											this.ticks++;
+																											if (this.ticks == 40) {
+																												Mob _entity = (Mob) entityiterator;
+																												_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																												new Object() {
+																													private int ticks = 0;
+
+																													public void startDelay(LevelAccessor world) {
+																														ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																															this.ticks++;
+																															if (this.ticks == 40) {
+																																Mob _entity = (Mob) entityiterator;
+																																_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																																new Object() {
+																																	private int ticks = 0;
+
+																																	public void startDelay(LevelAccessor world) {
+																																		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																																			this.ticks++;
+																																			if (this.ticks == 40) {
+																																				Mob _entity = (Mob) entityiterator;
+																																				_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																																				new Object() {
+																																					private int ticks = 0;
+
+																																					public void startDelay(LevelAccessor ignoredWorld) {
+																																						ServerTickEvents.END_SERVER_TICK.register((server) -> {
+																																							this.ticks++;
+																																							if (this.ticks == 40) {
+																																								Mob _entity = (Mob) entityiterator;
+																																								_entity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+																																							}
+																																						});
+																																					}
+																																				}.startDelay(world);
+																																			}
+																																		});
+																																	}
+																																}.startDelay(world);
+																															}
+																														});
+																													}
+																												}.startDelay(world);
+																											}
+																										});
+																									}
+																								}.startDelay(world);
+																							}
+																						});
+																					}
+																				}.startDelay(world);
+																			}
+																		});
+																	}
+																}.startDelay(world);
+															}
+														});
 													}
-												}, 1);
-											if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
-												_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false));
-										} else if ((entity.getRootVehicle()) instanceof LivingEntity _livEnt78 && _livEnt78.hasEffect(MobEffects.MOVEMENT_SPEED)) {
-											if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
-												_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
-													@Override
-													public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
-														return Component.translatable("death.attack." + "spur");
-													}
-												}, 2);
-											if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
-												_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1, false, false));
+												}.startDelay(world);
+											}
+										} else if (entity.isPassenger()) {
+											if (entity instanceof Player _player && !_player.level().isClientSide())
+												_player.displayClientMessage(Component.literal((Component.translatable("translation.spur.on").getString())), true);
+											if (!((entity.getRootVehicle()) instanceof LivingEntity _livEnt72 && _livEnt72.hasEffect(MobEffects.MOVEMENT_SPEED))) {
+												if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
+													_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
+														@Override
+														public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
+															return Component.translatable("death.attack." + "spur");
+														}
+													}, 1);
+												if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
+													_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false));
+											} else if ((entity.getRootVehicle()) instanceof LivingEntity _livEnt78 && _livEnt78.hasEffect(MobEffects.MOVEMENT_SPEED)) {
+												if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
+													_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
+														@Override
+														public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
+															return Component.translatable("death.attack." + "spur");
+														}
+													}, 2);
+												if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
+													_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1, false, false));
+											}
 										}
 									}
 								}
 							}
 						}
-					}
+				}
 			}
 		}
 	}
