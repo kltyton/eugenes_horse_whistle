@@ -59,7 +59,7 @@ public class CallProcedure {
 
 // 遍历当前玩家驯服的所有马类生物
 			for (AbstractHorse tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && e.isTamed() && Objects.equals(e.getOwnerUUID(), entity.getUUID()))) {
-                if (!tamedEntity.isVehicle()) {
+				if (!tamedEntity.isVehicle()) {
 					// 检查马是否装备了鞍
 					if (tamedEntity.isSaddled()) {
 						// 传送装备了鞍的马到当前玩家位置
@@ -271,35 +271,36 @@ public class CallProcedure {
 													}
 												}.startDelay(world);
 											}
-										} else if (entity.isPassenger()) {
-											if (entity instanceof Player _player && !_player.level().isClientSide())
-												_player.displayClientMessage(Component.literal((Component.translatable("translation.spur.on").getString())), true);
-											if (!((entity.getRootVehicle()) instanceof LivingEntity _livEnt72 && _livEnt72.hasEffect(MobEffects.MOVEMENT_SPEED))) {
-												if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
-													_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
-														@Override
-														public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
-															return Component.translatable("death.attack." + "spur");
-														}
-													}, 1);
-												if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
-													_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false));
-											} else if ((entity.getRootVehicle()) instanceof LivingEntity _livEnt78 && _livEnt78.hasEffect(MobEffects.MOVEMENT_SPEED)) {
-												if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
-													_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
-														@Override
-														public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
-															return Component.translatable("death.attack." + "spur");
-														}
-													}, 2);
-												if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
-													_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1, false, false));
-											}
+
 										}
 									}
 								}
 							}
 						}
+				} else if (entity.isPassenger()) {
+					if (entity instanceof Player _player && !_player.level().isClientSide())
+						_player.displayClientMessage(Component.literal((Component.translatable("translation.spur.on").getString())), true);
+					if (!((entity.getRootVehicle()) instanceof LivingEntity _livEnt72 && _livEnt72.hasEffect(MobEffects.MOVEMENT_SPEED))) {
+						if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
+							_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
+								@Override
+								public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
+									return Component.translatable("death.attack." + "spur");
+								}
+							}, 1);
+						if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
+							_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false));
+					} else if ((entity.getRootVehicle()) instanceof LivingEntity _livEnt78 && _livEnt78.hasEffect(MobEffects.MOVEMENT_SPEED)) {
+						if ((entity.getRootVehicle()) instanceof LivingEntity _entity)
+							_entity.hurt(new DamageSource(_entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC)) {
+								@Override
+								public @NotNull Component getLocalizedDeathMessage(LivingEntity _msgEntity) {
+									return Component.translatable("death.attack." + "spur");
+								}
+							}, 2);
+						if ((entity.getRootVehicle()) instanceof LivingEntity _entity && !_entity.level().isClientSide())
+							_entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 1, false, false));
+					}
 				}
 			}
 		}
