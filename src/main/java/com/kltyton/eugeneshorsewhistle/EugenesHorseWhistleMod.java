@@ -2,7 +2,7 @@ package com.kltyton.eugeneshorsewhistle;
 
 import com.kltyton.eugeneshorsewhistle.config.ModConfig;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModKeyMappingsServer;
-import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModProcedures;
+import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModwhistle;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModSounds;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -19,7 +19,7 @@ public class EugenesHorseWhistleMod implements ModInitializer {
 		LOGGER.info("Initializing EugenesHorseWhistleMod");
 		AutoConfig.register(ModConfig.class, Toml4jConfigSerializer::new);
 
-		EugenesHorseWhistleModProcedures.load();
+		EugenesHorseWhistleModwhistle.load();
 
 		EugenesHorseWhistleModKeyMappingsServer.serverLoad();
 

@@ -1,4 +1,4 @@
-package com.kltyton.eugeneshorsewhistle.procedures;
+package com.kltyton.eugeneshorsewhistle.whistle;
 
 import com.kltyton.eugeneshorsewhistle.config.ModConfig;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModSounds;
@@ -57,7 +57,17 @@ public class CallProcedure {
 					_level.playLocalSound((entity.getX()), (entity.getY()), (entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 1, pitch, false);
 				}
 			}
-			{
+			final Vec3 playerCenter = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
+
+// 遍历当前玩家驯服的所有马类生物
+			for (Entity tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && ((AbstractHorse) e).isTamed() && ((AbstractHorse) e).getOwnerUUID().equals(entity.getUUID()))) {
+				AbstractHorse tamedHorse = (AbstractHorse) tamedEntity;
+
+				// 检查马是否装备了鞍
+				if (tamedHorse.isSaddled()) {
+					// 传送装备了鞍的马到当前玩家位置
+					tamedHorse.teleportTo(playerCenter.x(), playerCenter.y(), playerCenter.z());
+				}
 				final Vec3 _center = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
 				List<Entity> _entfound;
 				_entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(ENTITY_SEARCH_RADIUS), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();

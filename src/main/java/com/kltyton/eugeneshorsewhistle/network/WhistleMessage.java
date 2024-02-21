@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.network.FriendlyByteBuf;
 
-import com.kltyton.eugeneshorsewhistle.procedures.CallProcedure;
+import com.kltyton.eugeneshorsewhistle.whistle.CallProcedure;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
