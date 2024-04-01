@@ -45,14 +45,14 @@ public class CallProcedure {
 			return;
 		if (world instanceof Level _level) {
 			float pitch;
-			pitch = 0.5f + (new Random().nextFloat());
+			pitch = 0.12f + (new Random().nextFloat());
 			if (!_level.isClientSide()) {
-				_level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 1, pitch);
+				_level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 6, pitch);
 				if (!_level.isClientSide() && _level.getServer() != null) {
 					_level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, entity.position(), entity.getRotationVector(), _level instanceof ServerLevel ? (ServerLevel) _level : null, 4,
 							entity.getName().getString(), entity.getDisplayName(), _level.getServer(), entity), "cpm animate @s whistle");
 				} else {
-					_level.playLocalSound((entity.getX()), (entity.getY()), (entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 1, pitch, false);
+					_level.playLocalSound((entity.getX()), (entity.getY()), (entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 6, pitch, false);
 				}
 			}
 			final Vec3 playerCenter = new Vec3((entity.getX()), (entity.getY()), (entity.getZ()));
