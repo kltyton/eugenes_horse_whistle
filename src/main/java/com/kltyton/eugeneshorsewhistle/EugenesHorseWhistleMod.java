@@ -1,6 +1,6 @@
 package com.kltyton.eugeneshorsewhistle;
 
-import com.kltyton.eugeneshorsewhistle.config.ModConfig;
+import com.kltyton.eugeneshorsewhistle.Config.ModConfig;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModKeyMappingsServer;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModwhistle;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModSounds;

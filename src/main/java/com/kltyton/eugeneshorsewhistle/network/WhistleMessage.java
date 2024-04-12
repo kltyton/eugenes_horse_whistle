@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.network.FriendlyByteBuf;
 
-import com.kltyton.eugeneshorsewhistle.whistle.CallProcedure;
+import com.kltyton.eugeneshorsewhistle.whistle.whistleandspur;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 
@@ -33,7 +33,7 @@ public class WhistleMessage extends FriendlyByteBuf {
 				return;
 			if (pressed) {
 
-				CallProcedure.execute(world, entity);
+				whistleandspur.execute(world, entity);
 			}
 		});
 	}

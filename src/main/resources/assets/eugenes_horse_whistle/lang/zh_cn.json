@@ -1,5 +1,8 @@
 {
   "key.eugenes_horse_whistle.whistle": "吹口哨",
   "subtitles.whistle": "口哨",
-  "translation.spur.on": "驾!"
+  "translation.spur.on": "驾!",
+  "translation.tip.coming": "§2你的马正在赶来！",
+  "translation.tip.not.found": "§4你的马不在附近！",
+  "translation.tip.place.inappropriate": "§4这里塞不下你的马！"
 }
