@@ -21,7 +21,7 @@ If you make a video about this content, please give credit and link to this page
 - #### 以上仅适用于1.0版本，在1.0.1及以上版本，其属于开源模组，遵循的开源协议为MIT。
 The above is only applicable to version 1.0. In version 1.0.1 and above, it is an open source module and it follows the open source license MIT.
 ## 其他|Other
-- #### 这个mod最先由Eugene使用mcreatot制作
+- #### 这个mod最先由Eugene使用mcreator制作
 This mod was originally created by [Eugene](https://modrinth.com/user/Eugene).
 The tool used is mcreator.
 - #### 后续更新重置由kltyton负责，且不再使用MCR
