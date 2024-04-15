@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "minecraft:diamond_horse_armor"
+  },
+  "base": {
+    "item": "minecraft:ender_eye"
+  },
+  "addition": {
+    "item": "minecraft:ender_pearl"
+  },
+  "result": {
+    "item": "eugenes_horse_whistle:ender_horse_armor"
+  }
+}

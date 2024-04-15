@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  a",
+    "bbb",
+    "c c"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:ender_eye"
+    },
+    "b": {
+      "item": "minecraft:ender_pearl"
+    },
+    "c": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "eugenes_horse_whistle:ender_horse_armor",
+    "count": 1
+  }
+}

@@ -1,30 +1,39 @@
 {
   "schemaVersion": 1,
   "id": "eugenes_horse_whistle",
-  "version": "1.0.1",
+  "version": "1.1.0",
+
   "name": "Eugene's Horse Whistle",
+  "description": "Whistle to call your horse, spur it to speed up, just like that in RDR2!",
   "authors": [
     "kltyton,eugene"
   ],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "NOT",
+    "sources": "https://github.com/kltyton/eugenes_horse_whistle"
   },
   "license": "MIT",
   "icon": "assets/eugenes_horse_whistle/icon.png",
+
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.kltyton.eugeneshorsewhistle.EugenesHorseWhistleMod"
+      "com.kltyton.eugeneshorsewhistle.EugenesHorseWhistle"
     ],
     "client": [
-      "com.kltyton.eugeneshorsewhistle.ClientInit"
+      "com.kltyton.eugeneshorsewhistle.EugenesHorseWhistleClientInit"
     ]
   },
+  "mixins": [
+    "EugenesHorseWhistle.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.14.21",
     "fabric": "*",
-    "minecraft": "1.20.x",
+    "minecraft": "1.20.1",
     "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
   }
 }

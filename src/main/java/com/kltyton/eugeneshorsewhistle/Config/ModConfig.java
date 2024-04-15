@@ -10,15 +10,25 @@ public class ModConfig implements ConfigData {
     public double teleportDistanceThreshold = 64.0;
     public boolean playWhistleSound = true;
     public boolean spurs = true;
+
     public double getEntitySearchRadius() {
         return entitySearchRadius;
     }
+
     public int getMaxTeleportOffset() {
         return maxTeleportOffset;
     }
+
     public double getTeleportDistanceThreshold() {
         return teleportDistanceThreshold;
     }
-    public boolean shouldPlayWhistleSound() {return playWhistleSound;}
-    public boolean Spurs() {return spurs;}
+
+    public boolean shouldPlayWhistleSound() {
+        return playWhistleSound;
+    }
+
+    public boolean isSpurs() {
+        return spurs;
+    }
+
 }

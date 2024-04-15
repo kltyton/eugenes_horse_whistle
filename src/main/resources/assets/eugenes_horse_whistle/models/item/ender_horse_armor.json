@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "eugenes_horse_whistle:item/ender_horse_armor"
+  }
+}
