@@ -67,36 +67,20 @@ public class whistleandspur {
 					}
 				}
 			}
+			boolean found =false;
 			final Vec3 playerCenter = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-			// 获取保存的马实体的NBT数据列表
-			for (byte[] nbtData : horsediscarded.getHorseNbtData().getNbtDataList()) {
-				try {
-					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
-					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
-					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
-					if (tamedEntity != null) {
-						tamedEntity.load(horseTag);
-						// 将马实体的位置设置为当前玩家的位置
-						tamedEntity.setPos(playerCenter.x, playerCenter.y, playerCenter.z);
-						// 将马实体添加到世界中
-						_level.addFreshEntity(tamedEntity);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				if (entity instanceof Player _player && !_player.level().isClientSide()) {
-					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())), false);
-				}
-			}
-			boolean foundEntity = false;
             for (AbstractHorse tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && e.isTamed() && Objects.equals(e.getOwnerUUID(), entity.getUUID()))) {
 				boolean hasEnderHorseArmor = false;
 				ItemStack armor = tamedEntity.getItemBySlot(EquipmentSlot.CHEST); // 获取马当前装备的盔甲
 				if (!armor.isEmpty() && armor.getItem() == ModItems.ENDER_HORSE_ARMOR) {
 					hasEnderHorseArmor = true;
+					if (!tamedEntity.isVehicle()) {
+						tamedEntity.remove(Entity.RemovalReason.DISCARDED);
+					}
 				}
 				if (!tamedEntity.isVehicle()) {
 					tamedEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, false, false));
+					found = true;
 						// 向实体添加效果
 					if (!tamedEntity.isLeashed()) {
 						double distance = tamedEntity.position().distanceTo(playerCenter);
@@ -125,6 +109,8 @@ public class whistleandspur {
 								if (entity instanceof Player _player && !_player.level().isClientSide()) {
 									_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.place.inappropriate").getString())), false);
 								}
+							}else if (entity instanceof Player _player && !_player.level().isClientSide()) {
+								_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())), false);
 							}
 							// 将马传送至目标位置
 							tamedEntity.teleportTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
@@ -135,7 +121,6 @@ public class whistleandspur {
 								tamedEntity.getNavigation().stop();
 							}
 							tamedEntity.getNavigation().stop();
-
 						}
 					}
 				} else if (SPURS) {
@@ -165,8 +150,7 @@ public class whistleandspur {
 						}
 					}
 				}
-				foundEntity = true;
-				if (!hasEnderHorseArmor) {
+                if (!hasEnderHorseArmor) {
 					if (tamedEntity instanceof Horse) {
 						new Object() {
 							private int ticks = 0;
@@ -310,15 +294,25 @@ public class whistleandspur {
 						});
 					}
 				}.startDelay(world);
-				if (!tamedEntity.isVehicle()) {
-					if (!hasEnderHorseArmor) {
-						if (entity instanceof Player _player && !_player.level().isClientSide()) {
-							_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())), false);
-						}
-					}
-				}
 			}
-			if (!foundEntity) {
+			// 获取保存的马实体的NBT数据列表
+			boolean found2 = false;
+			for (byte[] nbtData : horsediscarded.getHorseNbtData().getNbtDataList()) {
+				try {
+					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
+					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
+					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
+					if (tamedEntity != null) {
+						tamedEntity.load(horseTag);
+						tamedEntity.setPos(playerCenter.x, playerCenter.y, playerCenter.z);
+						_level.addFreshEntity(tamedEntity);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				found2 = true;
+			}
+			if (!found && !found2) {
 				if (entity instanceof Player _player && !_player.level().isClientSide()) {
 					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.not.found").getString())), false);
 				}
