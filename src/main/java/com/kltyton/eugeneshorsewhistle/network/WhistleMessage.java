@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.network.FriendlyByteBuf;
 
-import com.kltyton.eugeneshorsewhistle.whistle.whistleandspur;
+import com.kltyton.eugeneshorsewhistle.whistle.UseWhistleAndSpur;
 
 import io.netty.buffer.Unpooled;
 
@@ -22,7 +22,7 @@ public class WhistleMessage extends FriendlyByteBuf {
 			Level world = entity.level();
 			if (pressed) {
 				// 执行响笛和马刺
-				whistleandspur.execute(world, entity);
+				UseWhistleAndSpur.execute(world, entity);
 			}
 		});
 	}

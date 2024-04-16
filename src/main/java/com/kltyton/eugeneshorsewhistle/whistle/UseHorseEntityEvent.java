@@ -5,16 +5,16 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
 
-public class usehorseentity {
-    public usehorseentity() {
+public class UseHorseEntityEvent {
+    public UseHorseEntityEvent() {
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             // 检查玩家是否右键点击了一个马
-            if (entity instanceof AbstractHorse tamedEntity) {
+            if (entity instanceof Horse tamedEntity) {
                 // 检查玩家主手是否拿着末影马铠
                 ItemStack mainHandItem = player.getItemInHand(InteractionHand.MAIN_HAND);
                 boolean mainHandHasEnderHorseArmor = !mainHandItem.isEmpty() && mainHandItem.getItem() == ModItems.ENDER_HORSE_ARMOR;
@@ -35,7 +35,7 @@ public class usehorseentity {
                             player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
                         }
                         // 给马装备末影马铠
-                        AbstractHorse horse = (AbstractHorse) entity;
+                        Horse horse = (Horse) entity;
                         ItemStack oldArmor = horse.getItemBySlot(EquipmentSlot.CHEST);
                         // 如果马已经装备了其他马铠
                         if (!oldArmor.isEmpty()) {

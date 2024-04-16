@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class horsenbtdata {
+public class HorseNbtDataSaveEvent {
     private final List<byte[]> nbtDataList = new ArrayList<>();
 
     // 保存马实体的 NBT 数据

@@ -8,11 +8,11 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
 import java.util.Objects;
 
-public class horsediscarded {
+public class HorseDiscardedEvent {
     // 使用全局的horsenbtdata对象
-    private static final horsenbtdata horseNbtData = new horsenbtdata();
+    private static final HorseNbtDataSaveEvent HORSE_NBT_DATA = new HorseNbtDataSaveEvent();
 
-    public horsediscarded() {
+    public HorseDiscardedEvent() {
         PlayerStopRidingEvent.EVENT.register((player, entity) -> {
             if (entity instanceof AbstractHorse tamedEntity) {
                 if (tamedEntity.isTamed() && Objects.equals(tamedEntity.getOwnerUUID(), player.getUUID())) {
@@ -23,7 +23,7 @@ public class horsediscarded {
                     }
                     if (hasEnderHorseArmor) {
                         // 保存马实体的NBT数据
-                        horseNbtData.saveNbtData(tamedEntity);
+                        HORSE_NBT_DATA.saveNbtData(tamedEntity);
                         // 移除马实体
                         tamedEntity.remove(Entity.RemovalReason.DISCARDED);
                     }
@@ -32,7 +32,7 @@ public class horsediscarded {
         });
     }
     // 获取全局的horsenbtdata对象
-    public static horsenbtdata getHorseNbtData() {
-        return horseNbtData;
+    public static HorseNbtDataSaveEvent getHorseNbtData() {
+        return HORSE_NBT_DATA;
     }
 }

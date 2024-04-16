@@ -4,7 +4,7 @@ import com.kltyton.eugeneshorsewhistle.Config.ModConfig;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModKeyMappingsServer;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModwhistle;
 import com.kltyton.eugeneshorsewhistle.init.EugenesHorseWhistleModSounds;
-import com.kltyton.eugeneshorsewhistle.init.HorseDiscarded;
+import com.kltyton.eugeneshorsewhistle.init.HorseEventRegister;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -23,6 +23,6 @@ public class EugenesHorseWhistle implements ModInitializer {
 		EugenesHorseWhistleModKeyMappingsServer.serverLoad();
 		EugenesHorseWhistleModSounds.load();
 		ModItems.registerModItems();
-		HorseDiscarded.load();
+		HorseEventRegister.load();
 	}
 }

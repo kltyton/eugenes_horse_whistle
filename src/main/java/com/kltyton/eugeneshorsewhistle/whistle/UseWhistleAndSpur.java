@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
 
-public class whistleandspur {
+public class UseWhistleAndSpur {
 	private static final double ENTITY_SEARCH_RADIUS = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getEntitySearchRadius();
 	private static final int MAX_TELEPORT_OFFSET = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getMaxTeleportOffset();
 	private static final double TELEPORT_DISTANCE_THRESHOLD = AutoConfig.getConfigHolder(ModConfig.class).getConfig().getTeleportDistanceThreshold();
@@ -297,7 +297,7 @@ public class whistleandspur {
 			}
 			// 获取保存的马实体的NBT数据列表
 			boolean found2 = false;
-			for (byte[] nbtData : horsediscarded.getHorseNbtData().getNbtDataList()) {
+			for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
 				try {
 					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
 					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
