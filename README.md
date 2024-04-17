@@ -19,7 +19,6 @@ This content is All Rights Reserved, meaning that you cannot redistribute/modify
 - #### 欢迎您将其收录到整合包中，请提前在B站私信或者QQ频道征得我的同意。如果您用其制作视频，请在简介处附上此发布页面的链接和我的bilibili主页，也欢迎在简介艾特我，我很想看你们的视频！ 
 If you make a video about this content, please give credit and link to this page, and I would love to watch your videos! Please let me know on Discord.
 - #### 以上仅适用于1.0版本，在1.0.1及以上版本，其属于开源模组，遵循的开源协议为~~MIT~~。AGPL-3.0。
-修改原因:在我们的交流群中，某人“潜伏”(虽然有些夸张化，但用这个词可以让我表现自己的鄙夷之情)其中并对我们开发的数据包和mod在某购物网站进行倒卖。
 The above is only applicable to version 1.0. In version 1.0.1 and above, it is an open source module and it follows the open source license ~~MIT~~.AGPL-3.0.
 ## 其他|Other
 - #### 这个mod最先由Eugene使用mcreator制作
