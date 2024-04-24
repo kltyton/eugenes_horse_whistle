@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -300,7 +301,8 @@ public class UseWhistleAndSpur {
 			for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
 				try {
 					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
-					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
+					NbtAccounter nbtAccounter = new NbtAccounter(2097152L, 512); // 添加这一行
+					CompoundTag horseTag = NbtIo.readCompressed(inputStream, nbtAccounter); // 修改这一行
 					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
 					if (tamedEntity != null) {
 						tamedEntity.load(horseTag);
@@ -310,6 +312,7 @@ public class UseWhistleAndSpur {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
 				found2 = true;
 			}
 			if (!found && !found2) {
