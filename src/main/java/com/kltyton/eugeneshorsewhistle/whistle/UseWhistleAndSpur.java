@@ -301,8 +301,8 @@ public class UseWhistleAndSpur {
 			for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
 				try {
 					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
-					NbtAccounter nbtAccounter = new NbtAccounter(2097152L, 512); // 添加这一行
-					CompoundTag horseTag = NbtIo.readCompressed(inputStream, nbtAccounter); // 修改这一行
+					NbtAccounter nbtAccounter = new NbtAccounter(2097152L, 512);
+					CompoundTag horseTag = NbtIo.readCompressed(inputStream, nbtAccounter);
 					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
 					if (tamedEntity != null) {
 						tamedEntity.load(horseTag);
@@ -312,7 +312,6 @@ public class UseWhistleAndSpur {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 				found2 = true;
 			}
 			if (!found && !found2) {
