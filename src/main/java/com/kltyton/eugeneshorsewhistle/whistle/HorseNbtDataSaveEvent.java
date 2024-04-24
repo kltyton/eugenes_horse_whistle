@@ -1,7 +1,6 @@
 package com.kltyton.eugeneshorsewhistle.whistle;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 
@@ -19,8 +18,7 @@ public class HorseNbtDataSaveEvent {
         byte[] existingData = null;
         for (byte[] data : nbtDataList) {
             try (ByteArrayInputStream inputStream = new ByteArrayInputStream(data)) {
-                NbtAccounter nbtAccounter = new NbtAccounter(2097152L, 512);
-                CompoundTag existingTag = NbtIo.readCompressed(inputStream, nbtAccounter);
+                CompoundTag existingTag = NbtIo.readCompressed(inputStream);
                 if (existingTag.getUUID("UUID").equals(horse.getUUID())) {
                     existingData = data;
                     break;
@@ -29,8 +27,6 @@ public class HorseNbtDataSaveEvent {
                 e.printStackTrace();
             }
         }
-
-
         // 更新
         if (existingData != null) {
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

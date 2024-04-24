@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -301,8 +300,7 @@ public class UseWhistleAndSpur {
 			for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
 				try {
 					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
-					NbtAccounter nbtAccounter = new NbtAccounter(2097152L, 512);
-					CompoundTag horseTag = NbtIo.readCompressed(inputStream, nbtAccounter);
+					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
 					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
 					if (tamedEntity != null) {
 						tamedEntity.load(horseTag);
@@ -315,7 +313,7 @@ public class UseWhistleAndSpur {
 				found2 = true;
 			}
 			if (!found && !found2) {
-				if (entity instanceof Player _player && !_player.level().isClientSide()) {
+				if (entity instanceof Player _player && !_player.level().isClientSide() && !_player.isPassenger()) {
 					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.not.found").getString())), false);
 				}
 			}
