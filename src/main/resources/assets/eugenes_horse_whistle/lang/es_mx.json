@@ -1,0 +1,10 @@
+{
+  "item.eugenes_horse_whistle.ender_horse_armor": "Armadura de caballo de Ender",
+  "key.eugenes_horse_whistle.whistle": "Silbido/Espuela",
+  "subtitles.whistle": "Silbido",
+  "translation.spur.on": "¡Arre!",
+  "translation.tip.coming": "§2¡Tu caballo está viniendo!",
+  "translation.tip.not.found": "§4¡Tu caballo no está cerca!",
+  "translation.tip.place.inappropriate": "§4¡Aquí es demasiado estrecho para tu caballo!",
+  "HoverText.ender_horse_armor": "§eDespués de ser equipado por el caballo, ¡teletransporta tu caballo directamente hacia ti donde sea que estés!"
+}
