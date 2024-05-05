@@ -4,9 +4,9 @@
   "package": "com.kltyton.eugeneshorsewhistle.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinPlayer",
+    "AbstractHorseAccessor",
     "HorseDeathMixin",
-    "AbstractHorseAccessor"
+    "PlayerMixin"
   ],
   "client": [
   ],

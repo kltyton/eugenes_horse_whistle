@@ -59,15 +59,11 @@ public class UseWhistleAndSpur {
 			if (PLAYER_WHISTLE_SOUND) {
 				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 1, pitch);
-					if (_level.getServer() != null) {
 						_level.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(CommandSource.NULL, entity.position(), entity.getRotationVector(), _level, 4,
 								entity.getName().getString(), entity.getDisplayName(), _level.getServer(), entity), "cpm animate @s whistle");
-					} else {
-						_level.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), EugenesHorseWhistleModSounds.WHISTLE, SoundSource.PLAYERS, 1, pitch, false);
-					}
 				}
 			}
-			boolean found =false;
+			boolean found = false;
 			final Vec3 playerCenter = new Vec3(entity.getX(), entity.getY(), entity.getZ());
             for (AbstractHorse tamedEntity : _level.getEntitiesOfClass(AbstractHorse.class, new AABB(playerCenter, playerCenter).inflate(ENTITY_SEARCH_RADIUS), e -> e instanceof AbstractHorse && e.isTamed() && Objects.equals(e.getOwnerUUID(), entity.getUUID()))) {
 				boolean hasEnderHorseArmor = false;
@@ -219,6 +215,9 @@ public class UseWhistleAndSpur {
 							this.ticks++;
 							if (this.ticks == 40) {
 								tamedEntity.getNavigation().moveTo((entity.getX()), (entity.getY()), (entity.getZ()), 2);
+								if (entity instanceof Player _player && !_player.isPassenger()) {
+									_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())),false);
+								}
 								new Object() {
 									private int ticks = 0;
 									public void startDelay(LevelAccessor world) {
@@ -297,25 +296,27 @@ public class UseWhistleAndSpur {
 			}
 			// 获取保存的马实体的NBT数据列表
 			boolean found2 = false;
-			for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
-				try {
-					ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
-					CompoundTag horseTag = NbtIo.readCompressed(inputStream);
-					AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
-					if (tamedEntity != null) {
-						tamedEntity.load(horseTag);
-						tamedEntity.setPos(playerCenter.x, playerCenter.y, playerCenter.z);
-						_level.addFreshEntity(tamedEntity);
+			if (entity instanceof Player _player && !_player.isPassenger()) {
+				for (byte[] nbtData : HorseDiscardedEvent.getHorseNbtData().getNbtDataList()) {
+					try {
+						ByteArrayInputStream inputStream = new ByteArrayInputStream(nbtData);
+						CompoundTag horseTag = NbtIo.readCompressed(inputStream);
+						AbstractHorse tamedEntity = EntityType.HORSE.create(_level);
+						if (tamedEntity != null) {
+							tamedEntity.load(horseTag);
+							tamedEntity.setPos(playerCenter.x, playerCenter.y, playerCenter.z);
+							_level.addFreshEntity(tamedEntity);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+					found2 = true;
+				}if (found2 && !_player.isPassenger()) {
+					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())), false);
 				}
-				found2 = true;
 			}
-			if (!found && !found2) {
-				if (entity instanceof Player _player && !_player.level().isClientSide() && !_player.isPassenger()) {
-					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.not.found").getString())), false);
-				}
+			if (entity instanceof Player player && !player.level().isClientSide() && !found && !found2 && !player.isPassenger()) {
+				player.displayClientMessage(Component.literal((Component.translatable("translation.tip.not.found").getString())), false);
 			}
 		}
 	}

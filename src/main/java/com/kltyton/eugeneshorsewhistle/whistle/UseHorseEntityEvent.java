@@ -13,15 +13,12 @@ import java.util.Objects;
 public class UseHorseEntityEvent {
     public UseHorseEntityEvent() {
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            // 检查玩家是否右键点击了一个马
             if (entity instanceof Horse tamedEntity) {
                 // 检查玩家主手是否拿着末影马铠
                 ItemStack mainHandItem = player.getItemInHand(InteractionHand.MAIN_HAND);
                 boolean mainHandHasEnderHorseArmor = !mainHandItem.isEmpty() && mainHandItem.getItem() == ModItems.ENDER_HORSE_ARMOR;
-                // 检查玩家副手是否拿着末影马铠
                 ItemStack offHandItem = player.getItemInHand(InteractionHand.OFF_HAND);
                 boolean offHandHasEnderHorseArmor = !offHandItem.isEmpty() && offHandItem.getItem() == ModItems.ENDER_HORSE_ARMOR;
-                // 如果玩家主手或者副手拿着末影马铠
                 if (mainHandHasEnderHorseArmor || offHandHasEnderHorseArmor) {
                     if (tamedEntity.isTamed() && Objects.equals(tamedEntity.getOwnerUUID(), player.getUUID())) {
                         // 如果玩家主手拿着末影马铠
@@ -50,7 +47,6 @@ public class UseHorseEntityEvent {
                     }
                 }
             }
-            // 返回PASS，表示这个事件应该继续传递给其他的监听器
             return InteractionResult.PASS;
         });
     }

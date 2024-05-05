@@ -13,7 +13,6 @@ import java.util.List;
 public class HorseNbtDataSaveEvent {
     private final List<byte[]> nbtDataList = new ArrayList<>();
 
-    // 保存马实体的 NBT 数据
     public void saveNbtData(AbstractHorse horse) {
         byte[] existingData = null;
         for (byte[] data : nbtDataList) {
