@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public class MixinPlayer {
+public class PlayerMixin {
     @Inject(method = "rideTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;stopRiding()V"))
     private void onPlayerStopRiding(CallbackInfo ci) {
         Player player = (Player) (Object) this;
