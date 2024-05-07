@@ -306,13 +306,12 @@ public class UseWhistleAndSpur {
 							tamedEntity.load(horseTag);
 							tamedEntity.setPos(playerCenter.x, playerCenter.y, playerCenter.z);
 							_level.addFreshEntity(tamedEntity);
+							_player.startRiding(tamedEntity);
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					found2 = true;
-				}if (found2 && !_player.isPassenger()) {
-					_player.displayClientMessage(Component.literal((Component.translatable("translation.tip.coming").getString())), false);
 				}
 			}
 			if (entity instanceof Player player && !player.level().isClientSide() && !found && !found2 && !player.isPassenger()) {
